@@ -1,22 +1,26 @@
+// *************************************************
+// Program: Bamazon App
+// Author: Rod Skoglund
+// File: bamazonSupervisor.js
+// *************************************************
+
+// Declare packages
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require("console.table");
 
+// Create connection to mySQL bamazon DB
 var connection = mysql.createConnection({
   host: "localhost",
-
-  // Your port; if not 3306
   port: 3306,
-
-  // Your username
   user: "root",
-
-  // Your password
   password: "rootroot",
   database: "bamazon"
 });
 
 console.log("\n");
+
+// Ask Supervisor what they want to do
 inquirer.prompt([
 
     {
@@ -25,47 +29,54 @@ inquirer.prompt([
       message: "What would you like to do?",
       choices: ["View Product Sales by Department", "Create New Department"]
     }
-
+    // Process requested Action
     ]).then(function(res) {
-        // console.log("\n");
-        // console.log(res.action);
         connection.connect(function(err) {
             if (err) throw err;
             switch (res.action) {
 
                 case "View Product Sales by Department":
-                    // console.log(res.action);
                     viewByDepartments(res);
                     break;
             
                 case "Create New Department":
-                    // console.log(res.action);
                     addNewDepartment(res);
-            }
-        });
-    });
+            } // end switch statement
+        }); // end connection.connect statement
+    }); // end Inquirer.prompt .then action
 
-    // function viewProducts(response) {
     function viewByDepartments(res) {
-        // SELECT departments.*, SUM(products.product_sales) AS product_sales, (SUM(products.product_sales) - departments.over_head_costs) AS total_profit FROM departments INNER JOIN products
-        //         ON departments.department_name = products.department_name WHERE department_Id > 0 GROUP BY departments.department_name;
-
         console.log(res.action);
         console.log("\n");
+        // define query statement for DB query
         var query = "SELECT departments.*, SUM(products.product_sales) AS product_sales, " + 
                     "(SUM(products.product_sales) - departments.over_head_costs) AS total_profit " + 
-                    "FROM departments INNER JOIN products " + 
+                    "FROM departments LEFT JOIN products " + 
                     "ON departments.department_name = products.department_name " + 
                     "WHERE department_Id > 0 GROUP BY departments.department_name"
+
+        // Run query and format results for display in client (node.js) window
         connection.query(query, function(err, res) {
             var values = [];
             for (var i = 0; i < res.length; i++) {
+                var pSales = "";
+                var tProfit = "";
+                if (res[i].product_sales == null) {
+                    pSales = null;
+                } else {
+                    pSales = "  $" + res[i].product_sales.toFixed(2);
+                }
+                if (res[i].total_profit == null) {
+                    tProfit = null;
+                } else {
+                    tProfit = "  $" + res[i].total_profit.toFixed(2);
+                }
                 var iRow = [
                     "   " + res[i].department_id,
                     res[i].department_name,
-                    "  $" + res[i].over_head_costs.toFixed(2).toString(),
-                    "  $" + res[i].product_sales.toFixed(2).toString(),
-                    "  $" + res[i].total_profit.toFixed(2).toString()
+                    "  $" + res[i].over_head_costs.toFixed(2),
+                    pSales,
+                    tProfit
                 ]
                 values.push(iRow);
             }
@@ -77,7 +88,18 @@ inquirer.prompt([
     }
 
     function addNewDepartment(res) {
+        // Create list with all existing Departments
+        var validDepts = [];
+        var query2 = connection.query("SELECT * FROM products", function(err, res3) {
+            // console.log(res3);
+            for (var j = 0; j < res3.length; j++) {
+                validDepts.push(res3[j].product_name);
+            }
+        });
+
         console.log(res.action);
+
+        // Get data from Supervisor/User
         inquirer.prompt([
             {
                 type: "input",
@@ -89,21 +111,27 @@ inquirer.prompt([
                 name: "ohc",
                 message: "Enter the Over Head Costs: "
             }
-        ]).then(function(answer) {
-            // when finished prompting, insert a new item into the db with that info
-            connection.query(
-              "INSERT INTO departments SET ?",
-              {
-                department_name: answer.dName,
-                over_head_costs: answer.ohc
-              },
-              function(err) {
-                if (err) throw err;
-                console.log("Your new department was added successfully!");
-              }
-            );
+        ]).then (function(answer) {
+            
+            // Make sure the user's new department does not already exist
+            if (validDepts.indexOf(answer.pName) >= 0) {
+                // The users new department does not exist - process the request 
+                // to add it to the table
+                connection.query("INSERT INTO departments SET ?",
+                {
+                    department_name: answer.dName,
+                    over_head_costs: answer.ohc
+                },
+                function(err) {
+                    if (err) throw err;
+                    console.log("Your new department was added successfully!");
+                });
+            } else {
+                console.log("\nThat Department already exists - Please try again.");
+            }
+
             connection.end();
-        }); // .then(function(mgrInput))
+        }); // .then(function(answer))
 
     }
     
