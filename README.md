@@ -88,35 +88,35 @@ In order to run this application, you will need the following utilities and pack
 
 ----------------
 ## **4. Example Results**
-    ###A Customer Interaction example:
-        ![Example Customer Interaction](./Bamazon-Customer.gif)
+### A Customer Interaction example:
+![Example Customer Interaction](./Bamazon-Customer.gif)
 
-    ###The Manager Menu:
-        ![Manager Menu](./Bamazon-Mgr-Menu.gif)
+### The Manager Menu:
+![Manager Menu](./Bamazon-Mgr-Menu.gif)
 
-    ###The Manager - View Products:
-        ![Manager Menu](./Bamazon-Mgr-Menu.gif)
+### The Manager - View Products:
+![Manager Menu](./Bamazon-Mgr-ViewProd.gif)
 
-    ###The Manager - View Low Inventory:
-        ![Manager Menu](./Bamazon-Mgr-LowInv.gif)
+### The Manager - View Low Inventory:
+![Manager Menu](./Bamazon-Mgr-LowInv.gif)
 
-    ###The Manager - Add Inventory:
-        ![Manager Menu](./Bamazon-Mgr-AddInv.gif)
+### The Manager - Add Inventory:
+![Manager Menu](./Bamazon-Mgr-AddInv.gif)
 
-    ###The Manager - Add New Product:
-        ![Manager Menu](./Bamazon-Mgr-Menu.gif)
+### The Manager - Add New Product:
+![Manager Menu](./Bamazon-Mgr-NewProd.gif)
     
-    ###The Supervisor Menu:
-        ![Manager Menu](./Bamazon-Supv-Menu.gif)
+### The Supervisor Menu:
+![Manager Menu](./Bamazon-Supv-Menu.gif)
 
-    ###The Supervisor - View Product Sales by Department:
-        ![Manager Menu](./Bamazon-Supv-ViewDept.gif)
+### The Supervisor - View Product Sales by Department:
+![Manager Menu](./Bamazon-Supv-ViewDept.gif)
 
-    ###The Supervisor - Create New Department:
-        ![Manager Menu](./Bamazon-Supv-AddDept.gif)
+### The Supervisor - Create New Department:
+![Manager Menu](./Bamazon-Supv-AddDept.gif)
 
-    ###The Supervisor - Create New Department - Duplicate:
-        ![Manager Menu](./Bamazon-Supv-AddDeptFail.gif)
+### The Supervisor - Create New Department - Duplicate:
+![Manager Menu](./Bamazon-Supv-AddDeptFail.gif)
 
 
 Enjoy :smiley: 
