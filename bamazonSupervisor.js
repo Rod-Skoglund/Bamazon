@@ -90,10 +90,9 @@ inquirer.prompt([
     function addNewDepartment(res) {
         // Create list with all existing Departments
         var validDepts = [];
-        var query2 = connection.query("SELECT * FROM products", function(err, res3) {
-            // console.log(res3);
+        var query2 = connection.query("SELECT * FROM departments", function(err, res3) {
             for (var j = 0; j < res3.length; j++) {
-                validDepts.push(res3[j].product_name);
+                validDepts.push(res3[j].department_name);
             }
         });
 
@@ -112,9 +111,8 @@ inquirer.prompt([
                 message: "Enter the Over Head Costs: "
             }
         ]).then (function(answer) {
-            
             // Make sure the user's new department does not already exist
-            if (validDepts.indexOf(answer.pName) >= 0) {
+            if (validDepts.indexOf(answer.dName) < 0) {
                 // The users new department does not exist - process the request 
                 // to add it to the table
                 connection.query("INSERT INTO departments SET ?",
